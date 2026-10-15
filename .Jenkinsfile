@@ -2,21 +2,21 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "akshatha29/app-image"
+        DOCKER_IMAGE = "shreyavinay30/shreyaa"
     }
 
     stages {
 
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/akshathavishal2901/final.git'
+                git 'https://github.com/shreyavinay30/shree.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("${DOCKER_IMAGE}:latest")
+                    docker.build("${DOCKER_IMAGE}:v1")
                 }
             }
         }
@@ -24,7 +24,7 @@ pipeline {
         stage('Login to Docker Hub') {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: 'dockerhub-creds',
+                    credentialsId: 'docker-creds',
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
@@ -36,8 +36,8 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('', 'dockerhub-creds') {
-                        docker.image("${DOCKER_IMAGE}:latest").push()
+                    docker.withRegistry('', 'docker-creds') {
+                        docker.image("${DOCKER_IMAGE}:v1").push()
                     }
                 }
             }
